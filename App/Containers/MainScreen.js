@@ -1,6 +1,8 @@
 import React from 'react'
-import { ScrollView, Text, Button } from 'react-native'
+import { ScrollView, View, Text, Button } from 'react-native'
 import { connect } from 'react-redux'
+import CalActions from '../Redux/CalRedux'
+
 // Add Actions - replace 'Your' with whatever your reducer is called :)
 // import YourActions from '../Redux/YourRedux'
 
@@ -8,6 +10,11 @@ import { connect } from 'react-redux'
 import styles from './Styles/MainScreenStyle'
 
 class MainScreen extends React.Component {
+  // static propTypes = {
+  //   dispatch: PropTypes.func,
+  //   fetching: PropTypes.bool,
+  //   attemptLogin: PropTypes.func
+  // }
 
   static navigationOptions = {
     title: 'MainScreen2'
@@ -18,9 +25,11 @@ class MainScreen extends React.Component {
   //   this.state = {}
   // }
 
-
   render () {
     const { navigate } = this.props.navigation
+    const { vacDays } = this.props.cal
+
+    console.log(vacDays)
 
     return (
       <ScrollView style={styles.container}>
@@ -29,9 +38,16 @@ class MainScreen extends React.Component {
         <Text style={styles.mainText}>MainScreen Container!!!3</Text>
         <Text style={styles.titleText}>MainScreen Container!!!4</Text>
         <Button
-          title="Go to LaunchScreen"
-          onPress={() => navigate('LaunchScreen', { title: 'kkk'}) }
+          title='Go to LaunchScreen'
+          onPress={() => navigate('LaunchScreen', {title: 'kkk'})}
         />
+        <Button
+          title='Fetch VacDays'
+          onPress={() => this.props.vacDaysRequest()}
+        />
+        <View>
+          {vacDays.map(day => (<Text key={day.date}>{day.date.toString()} {day.type}</Text>))}
+        </View>
       </ScrollView>
     )
   }
@@ -39,11 +55,13 @@ class MainScreen extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
+    cal: state.cal
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    vacDaysRequest: () => dispatch(CalActions.vacDaysRequest())
   }
 }
 

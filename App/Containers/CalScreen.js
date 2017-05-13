@@ -62,7 +62,7 @@ class CalScreen extends React.Component {
   *************************************************************/
   renderRow (rowData) {
     return (
-      <View style={{flex:1, flexDirection:'row', height:70}}>
+      <View style={{flex: 1, flexDirection: 'row', height: 70}}>
         <WeekRow />
       </View>
     )
