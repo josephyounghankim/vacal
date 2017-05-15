@@ -1,7 +1,8 @@
 import React from 'react'
-import { View, Text, ListView } from 'react-native'
+import { View, Text, ListView, Button } from 'react-native'
 import { connect } from 'react-redux'
 import WeekRow from '../Components/WeekRow'
+import CalActions from '../Redux/CalRedux'
 
 // For empty lists
 // import AlertMessage from '../Components/AlertMessage'
@@ -50,6 +51,10 @@ class CalScreen extends React.Component {
     this.state = {
       dataSource: ds.cloneWithRows(dataObjects)
     }
+  }
+
+  componentWillMount () {
+    // this.props.vacDaysRequest()
   }
 
   /* ***********************************************************
@@ -102,9 +107,30 @@ class CalScreen extends React.Component {
   }
 
   render () {
+    const { startDate, maxVacDays, vacDays } = this.props.cal
+    console.log( 'vacDays:', vacDays, vacDays.length )
+
+    const sTime = new Date(startDate).getTime()
+    const aYearTime = 365 * 24 * 3600 * 1000
+    const daysCount = vacDays.reduce((count, day) => {
+      const dTime = new Date(day.date).getTime()
+      if (dTime >= sTime && dTime < (sTime + aYearTime)) {
+        if (day.type === 'half') return count + 0.5
+        return count + 1.0
+      }
+      return count
+    }, 0)
+
     return (
       <View style={styles.container}>
         <Text>Hello ListView</Text>
+        <Text>Start Date:{startDate}</Text>
+        <Text>Days Left:{maxVacDays - daysCount}</Text>
+        <Text>Max Days:{maxVacDays}</Text>
+        <Button
+          title='Fetch VacDays'
+          onPress={() => this.props.vacDaysRequest()}
+        />
         <ListView
           contentContainerStyle={styles.listContent}
           dataSource={this.state.dataSource}
@@ -120,13 +146,14 @@ class CalScreen extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    // ...redux state to props here
-    github: state.github
+    cal: state.cal
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    vacDaysRequest: () => dispatch(CalActions.vacDaysRequest()),
+    addVacDay: vacDay => dispatch(CalActions.addVacDay(vacDay))
   }
 }
 

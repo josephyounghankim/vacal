@@ -13,8 +13,8 @@ import styles from './Styles/NavigationStyles'
 
 // Manifest of possible screens
 const PrimaryNav = StackNavigator({
-  MainScreen: { screen: MainScreen, navigationOptions: { title: 'MainScreen' } },
-  CalScreen: { screen: CalScreen }
+  CalScreen: { screen: CalScreen },
+  MainScreen: { screen: MainScreen, navigationOptions: { title: 'MainScreen' } }
 }, {
   headerMode: 'none'
 }

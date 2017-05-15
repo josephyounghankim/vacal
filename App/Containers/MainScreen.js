@@ -29,7 +29,7 @@ class MainScreen extends React.Component {
     const { navigate } = this.props.navigation
     const { vacDays } = this.props.cal
 
-    console.log(vacDays)
+    // console.log(this.props.cal.asMutable())
 
     return (
       <ScrollView style={styles.container}>
@@ -46,7 +46,7 @@ class MainScreen extends React.Component {
           onPress={() => this.props.vacDaysRequest()}
         />
         <View>
-          {vacDays.map(day => (<Text key={day.date}>{day.date.toString()} {day.type}</Text>))}
+          {vacDays.map(day => (<Text key={day.date}>{day.date} {day.type}</Text>))}
         </View>
       </ScrollView>
     )

@@ -15,7 +15,7 @@ export default Creators
 /* ------------- Initial State ------------- */
 
 export const INITIAL_STATE = Immutable({
-  startDate: new Date('2017-05-01'),
+  startDate: new Date('2017-05-01').toJSON(),
   maxVacDays: 20,
   vacDays: []
 })
@@ -25,8 +25,12 @@ export const INITIAL_STATE = Immutable({
 // request the data from an api
 export const requestAll = state => {
   const vacDays = [
-    { date: new Date('2017-05-02'), type: 'full' },
-    { date: new Date('2017-05-04'), type: 'half' }
+    { date: new Date('2017-05-02').toJSON(), type: 'full' },
+    { date: new Date('2017-05-04').toJSON(), type: 'half' },
+    { date: new Date('2017-07-31').toJSON(), type: 'half' },
+    { date: new Date('2017-08-01').toJSON(), type: 'half' },
+    { date: new Date('2018-05-04').toJSON(), type: 'full' },
+    { date: new Date('2018-05-05').toJSON(), type: 'full' },
   ]
   return state.merge({ vacDays })
 }
