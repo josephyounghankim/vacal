@@ -15,7 +15,7 @@ export default Creators
 /* ------------- Initial State ------------- */
 
 export const INITIAL_STATE = Immutable({
-  startDate: new Date('2017-05-01').toJSON(),
+  startDate: new Date('2016-09-14').toJSON(),
   maxVacDays: 20,
   vacDays: []
 })
@@ -25,14 +25,25 @@ export const INITIAL_STATE = Immutable({
 // request the data from an api
 export const requestAll = state => {
   const vacDays = [
+    { date: new Date('2016-12-27').toJSON(), type: 'full' },
+    { date: new Date('2016-12-28').toJSON(), type: 'full' },
+    { date: new Date('2016-12-29').toJSON(), type: 'full' },
+    { date: new Date('2017-01-31').toJSON(), type: 'half' },
+    { date: new Date('2017-02-01').toJSON(), type: 'half' },
+    { date: new Date('2017-02-23').toJSON(), type: 'full' },
+    { date: new Date('2017-02-24').toJSON(), type: 'full' },
+    { date: new Date('2017-02-27').toJSON(), type: 'full' },
+    { date: new Date('2017-03-31').toJSON(), type: 'full' },
+    { date: new Date('2017-04-03').toJSON(), type: 'half' },
+    { date: new Date('2017-04-17').toJSON(), type: 'half' },
+    { date: new Date('2017-04-18').toJSON(), type: 'half' },
     { date: new Date('2017-05-02').toJSON(), type: 'full' },
-    { date: new Date('2017-05-04').toJSON(), type: 'half' },
-    { date: new Date('2017-07-31').toJSON(), type: 'half' },
-    { date: new Date('2017-08-01').toJSON(), type: 'half' },
-    { date: new Date('2018-05-04').toJSON(), type: 'full' },
-    { date: new Date('2018-05-05').toJSON(), type: 'full' },
+    { date: new Date('2017-05-04').toJSON(), type: 'full' },
+    { date: new Date('2017-05-29').toJSON(), type: 'half' }
   ]
-  return state.merge({ vacDays })
+  const startDate = new Date('2016-09-14').toJSON()
+
+  return state.merge({ startDate, vacDays })
 }
 
 // // successful api lookup

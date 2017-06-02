@@ -8,5 +8,11 @@ export default StyleSheet.create({
     maxHeight: 50,
     // paddingTop: Metrics.titlePadding,
     backgroundColor: 'lightgreen'
+  },
+  fullday: {
+    backgroundColor: 'red'
+  },
+  halfday: {
+    backgroundColor: 'blue'
   }
 })

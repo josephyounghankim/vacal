@@ -1,21 +1,30 @@
 import React from 'react'
 import { View, Text, TouchableHighlight, TouchableOpacity } from 'react-native'
 import styles from './Styles/DayCellStyle'
+import moment from 'moment'
 
 export default class DayCell extends React.Component {
   handlePress = event => {}
   render () {
+    const date = moment(this.props.date).format('MM/DD')
+    return (
+      <TouchableOpacity style={[styles.container, styles[this.props.type + 'day']]} onPress={this.handlePress}>
+      <Text style={{color:'black', textAlign:'center'}}>{this.props.day} {date}</Text>
+      </TouchableOpacity>
+    )
+    /*
     return (this.props.day == 'Sun') ?
         (
           <TouchableOpacity style={styles.container} onPress={this.handlePress}>
-          <Text style={{color:'black', textAlign:'center'}}>{this.props.day}</Text>
+          <Text style={{color:'black', textAlign:'center'}}>{this.props.day} {date}</Text>
           </TouchableOpacity>
         ) :
         (
           <TouchableHighlight style={styles.container} onPress={this.handlePress}>
-          <Text style={{color:'black', textAlign:'center'}}>{this.props.day}</Text>
+          <Text style={{color:'black', textAlign:'center'}}>{this.props.day} {date}</Text>
           </TouchableHighlight>
         )
+    */
   }
 }
 

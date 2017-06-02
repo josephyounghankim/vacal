@@ -16,6 +16,22 @@ class CalScreen extends React.Component {
     dataSource: Object
   }
 
+  calculateWeekObjects (cal) {
+    const { startDate, vacDays } = cal
+    let realStartDate = new Date(startDate)
+    realStartDate = new Date(realStartDate.getTime() - (realStartDate.getDay() + 14) * 3600 * 24 * 1000 )
+
+    const weekObjects = []
+    for(let i=0; i < 70; i++) {
+      const sDate = new Date(realStartDate.getTime() + i * (7 * 3600 * 24 * 1000)).toJSON()
+      const eDate = new Date(new Date(sDate).getTime() + (7 * 3600 * 24 * 1000)).toJSON()
+      const vDays = vacDays.filter(vday => (vday.date >= sDate && vday.date < eDate ))
+      // if (vDays.length>0) console.log( 'vacDays && vDays:', vacDays, vDays)
+      weekObjects.push({ idx: i, sDate, vDays })
+    }
+    return weekObjects
+  }
+
   constructor (props) {
     super(props)
     /* ***********************************************************
@@ -23,18 +39,6 @@ class CalScreen extends React.Component {
     * This is an array of objects with the properties you desire
     * Usually this should come from Redux mapStateToProps
     *************************************************************/
-    const dataObjects = [
-      {title: 'First Title', description: 'First Description'},
-      {title: 'Second Title', description: 'Second Description'},
-      {title: 'Third Title', description: 'Third Description'},
-      {title: 'Fourth Title', description: 'Fourth Description'},
-      {title: 'Fifth Title', description: 'Fifth Description'},
-      {title: 'Sixth Title', description: 'Sixth Description'},
-      {title: 'First Title', description: 'First Description'},
-      {title: 'Second Title', description: 'Second Description'},
-      {title: 'Third Title', description: 'Third Description'},
-      {title: 'Seventh Title', description: 'Seventh Description'}
-    ]
 
     /* ***********************************************************
     * STEP 2
@@ -49,7 +53,7 @@ class CalScreen extends React.Component {
 
     // Datasource is always in state
     this.state = {
-      dataSource: ds.cloneWithRows(dataObjects)
+      dataSource: ds.cloneWithRows(this.calculateWeekObjects(props.cal))
     }
   }
 
@@ -66,9 +70,10 @@ class CalScreen extends React.Component {
     return <MyCustomCell title={rowData.title} description={rowData.description} />
   *************************************************************/
   renderRow (rowData) {
+    // console.log( rowData )
     return (
       <View style={{flex: 1, flexDirection: 'row', height: 70}}>
-        <WeekRow />
+        <WeekRow weekData={rowData}/>
       </View>
     )
     // <Text style={{color:'black'}}>{rowData.title}</Text>
@@ -92,6 +97,14 @@ class CalScreen extends React.Component {
       }
     }
   *************************************************************/
+  componentWillReceiveProps (newProps) {
+    if (newProps.cal) {
+      this.setState({
+        dataSource: this.state.dataSource.cloneWithRows(this.calculateWeekObjects(newProps.cal))
+      })
+    }
+  }
+
 
   // Used for friendly AlertMessage
   // returns true if the dataSource is empty
