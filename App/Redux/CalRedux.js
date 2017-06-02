@@ -6,6 +6,7 @@ import Immutable from 'seamless-immutable'
 const { Types, Creators } = createActions({
   addVacDay: ['vacDay'],
   removeVacDay: ['vacDay'],
+  updateVacDay: ['date'],
   vacDaysRequest: null
 })
 
@@ -46,6 +47,19 @@ export const requestAll = state => {
   return state.merge({ startDate, vacDays })
 }
 
+export const toggleVacDay = (state, action) => {
+  const { date } = action
+  const vacDays = Immutable.asMutable(state.vacDays, {deep: true})
+  const vDays = vacDays.filter(vday => (vday.date === date.toJSON()))
+  if (vDays.length < 1) {
+    vacDays.push({ date: date.toJSON(), type: 'full' })
+  } else {
+    const v = vDays[0]
+    if (v.type === 'full') v.type = 'half'
+    else if (v.type === 'half') vacDays.splice(vacDays.indexOf(v),1)
+  }
+  return state.merge({ vacDays })
+}
 // // successful api lookup
 // export const success = (state, action) => {
 //   const { payload } = action
@@ -59,5 +73,6 @@ export const requestAll = state => {
 /* ------------- Hookup Reducers To Types ------------- */
 
 export const reducer = createReducer(INITIAL_STATE, {
-  [Types.VAC_DAYS_REQUEST]: requestAll
+  [Types.VAC_DAYS_REQUEST]: requestAll,
+  [Types.UPDATE_VAC_DAY]: toggleVacDay
 })

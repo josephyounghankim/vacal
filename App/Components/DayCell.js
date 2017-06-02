@@ -4,12 +4,15 @@ import styles from './Styles/DayCellStyle'
 import moment from 'moment'
 
 export default class DayCell extends React.Component {
-  handlePress = event => {}
+  handlePress  = event => {
+    this.props.handlePress(this.props.date)
+  }
+
   render () {
     const date = moment(this.props.date).format('MM/DD')
     return (
       <TouchableOpacity style={[styles.container, styles[this.props.type + 'day']]} onPress={this.handlePress}>
-      <Text style={{color:'black', textAlign:'center'}}>{this.props.day} {date}</Text>
+      <Text style={[{color:'black', textAlign:'center'}, styles[this.props.day.toLowerCase() + 'dayText']]}>{this.props.day} {date}</Text>
       </TouchableOpacity>
     )
     /*

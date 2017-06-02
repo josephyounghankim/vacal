@@ -16,7 +16,12 @@ class CalScreen extends React.Component {
     dataSource: Object
   }
 
-  calculateWeekObjects (cal) {
+  handlePress = date => {
+    console.log('handlePress:', date)
+    this.props.updateVacDay(date)
+  }
+
+  calculateWeekObjects = cal => {
     const { startDate, vacDays } = cal
     let realStartDate = new Date(startDate)
     realStartDate = new Date(realStartDate.getTime() - (realStartDate.getDay() + 14) * 3600 * 24 * 1000 )
@@ -27,7 +32,7 @@ class CalScreen extends React.Component {
       const eDate = new Date(new Date(sDate).getTime() + (7 * 3600 * 24 * 1000)).toJSON()
       const vDays = vacDays.filter(vday => (vday.date >= sDate && vday.date < eDate ))
       // if (vDays.length>0) console.log( 'vacDays && vDays:', vacDays, vDays)
-      weekObjects.push({ idx: i, sDate, vDays })
+      weekObjects.push({ idx: i, sDate, vDays, handlePress: this.handlePress })
     }
     return weekObjects
   }
@@ -73,7 +78,7 @@ class CalScreen extends React.Component {
     // console.log( rowData )
     return (
       <View style={{flex: 1, flexDirection: 'row', height: 70}}>
-        <WeekRow weekData={rowData}/>
+        <WeekRow weekData={rowData} handlePress={rowData.handlePress}/>
       </View>
     )
     // <Text style={{color:'black'}}>{rowData.title}</Text>
@@ -121,7 +126,7 @@ class CalScreen extends React.Component {
 
   render () {
     const { startDate, maxVacDays, vacDays } = this.props.cal
-    console.log( 'vacDays:', vacDays, vacDays.length )
+    // console.log( 'vacDays:', vacDays, vacDays.length )
 
     const sTime = new Date(startDate).getTime()
     const aYearTime = 365 * 24 * 3600 * 1000
@@ -166,7 +171,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     vacDaysRequest: () => dispatch(CalActions.vacDaysRequest()),
-    addVacDay: vacDay => dispatch(CalActions.addVacDay(vacDay))
+    addVacDay: vacDay => dispatch(CalActions.addVacDay(vacDay)),
+    updateVacDay: date => dispatch(CalActions.updateVacDay(date))
   }
 }
 

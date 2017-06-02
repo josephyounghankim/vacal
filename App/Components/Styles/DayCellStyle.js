@@ -14,5 +14,11 @@ export default StyleSheet.create({
   },
   halfday: {
     backgroundColor: 'blue'
+  },
+  sundayText: {
+    color: 'red'
+  },
+  satdayText: {
+    color: 'green'
   }
 })
