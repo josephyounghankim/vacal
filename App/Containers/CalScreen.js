@@ -32,7 +32,15 @@ class CalScreen extends React.Component {
       const eDate = new Date(new Date(sDate).getTime() + (7 * 3600 * 24 * 1000)).toJSON()
       const vDays = vacDays.filter(vday => (vday.date >= sDate && vday.date < eDate ))
       // if (vDays.length>0) console.log( 'vacDays && vDays:', vacDays, vDays)
-      weekObjects.push({ idx: i, sDate, vDays, handlePress: this.handlePress })
+      const s = new Date(sDate)
+      const checkSum = vDays.reduce(((acc, vday) => {
+        const d = new Date(vday.date)
+        const diff = (d.getTime() - s.getTime())/(3600 * 24 * 1000)
+        const t = (vday.type === 'full') ? 8 : 0
+        // console.log('diff, t', s, d, diff, t)
+        return acc | (((2 << diff)) << t)
+      }), 0)
+      weekObjects.push({ idx: i, sDate, vDays, checkSum, handlePress: this.handlePress })
     }
     return weekObjects
   }
@@ -51,7 +59,7 @@ class CalScreen extends React.Component {
     * Make this function fast!  Perhaps something like:
     *   (r1, r2) => r1.id !== r2.id}
     *************************************************************/
-    const rowHasChanged = (r1, r2) => r1 !== r2
+    const rowHasChanged = (r1, r2) => r1.checkSum !== r2.checkSum
 
     // DataSource configured
     const ds = new ListView.DataSource({rowHasChanged})
