@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, ListView, Button } from 'react-native'
+import { View, Text, ListView, Button, BackAndroid } from 'react-native'
 import { connect } from 'react-redux'
 import WeekRow from '../Components/WeekRow'
 import CalActions from '../Redux/CalRedux'
@@ -9,6 +9,8 @@ import CalActions from '../Redux/CalRedux'
 
 // Styles
 import styles from './Styles/CalScreenStyle'
+
+BackAndroid.addEventListener('hardwareBackPress', () => true)
 
 class CalScreen extends React.Component {
 
@@ -53,7 +55,10 @@ class CalScreen extends React.Component {
     console.log('updateWeekObjects is called', this._curWeekIdx)
     const { startDate, vacDays } = cal
     const arr = this._lastWeekObjects
-    if (this._curWeekIdx < 0) return arr
+    if (this._curWeekIdx < 0) {
+      // arr.forEach(wo => wo.checkSum = -1)
+      return arr
+    }
     const wo = arr[this._curWeekIdx]
 
     const { sDate, eDate } = wo
