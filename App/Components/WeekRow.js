@@ -16,7 +16,7 @@ export default class WeekRow extends React.Component {
             const date = new Date(new Date(weekData.sDate).getTime()+i*24*3600*1000)
             const vDays = weekData.vDays.filter(vday => (vday.date === date.toJSON())) || []
             const type = (vDays.length>0) ? vDays[0].type : 'none'
-            return (<DayCell day={day} key={day} type={type} date={date} handlePress={handlePress} />)
+            return (<DayCell weekIdx={weekData.weekIdx} day={day} key={day} type={type} date={date} handlePress={handlePress} />)
           })
         }
       </View>

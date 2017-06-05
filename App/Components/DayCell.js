@@ -5,7 +5,7 @@ import moment from 'moment'
 
 export default class DayCell extends React.Component {
   handlePress  = event => {
-    this.props.handlePress(this.props.date)
+    this.props.handlePress(this.props.date, this.props.weekIdx)
   }
 
   render () {

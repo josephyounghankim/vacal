@@ -16,12 +16,14 @@ class CalScreen extends React.Component {
     dataSource: Object
   }
 
-  handlePress = date => {
-    console.log('handlePress:', date)
+  handlePress = (date, weekIdx) => {
+    console.log('handlePress:', date, weekIdx)
+    this._curWeekIdx = weekIdx
     this.props.updateVacDay(date)
   }
 
   calculateWeekObjects = cal => {
+    console.log('calculateWeekObjects is called')
     const { startDate, vacDays } = cal
     let realStartDate = new Date(startDate)
     realStartDate = new Date(realStartDate.getTime() - (realStartDate.getDay() + 14) * 3600 * 24 * 1000 )
@@ -40,9 +42,33 @@ class CalScreen extends React.Component {
         // console.log('diff, t', s, d, diff, t)
         return acc | (((2 << diff)) << t)
       }), 0)
-      weekObjects.push({ idx: i, sDate, vDays, checkSum, handlePress: this.handlePress })
+      weekObjects.push({ weekIdx: i, sDate, eDate, vDays, checkSum, handlePress: this.handlePress })
     }
+    this._lastWeekObjects = weekObjects.concat()
+    this._curWeekIdx = -1
     return weekObjects
+  }
+
+  updateWeekObjects = cal => {
+    console.log('updateWeekObjects is called', this._curWeekIdx)
+    const { startDate, vacDays } = cal
+    const arr = this._lastWeekObjects
+    if (this._curWeekIdx < 0) return arr
+    const wo = arr[this._curWeekIdx]
+
+    const { sDate, eDate } = wo
+    const vDays = vacDays.filter(vday => (vday.date >= sDate && vday.date < eDate ))
+    const s = new Date(sDate)
+    const checkSum = vDays.reduce(((acc, vday) => {
+      const d = new Date(vday.date)
+      const diff = (d.getTime() - s.getTime())/(3600 * 24 * 1000)
+      const t = (vday.type === 'full') ? 8 : 0
+      return acc | (((2 << diff)) << t)
+    }), 0)
+
+    arr[this._curWeekIdx] = Object.assign({}, wo, {checkSum, vDays})
+    this._lastWeekObjects = arr.concat()
+    return arr
   }
 
   constructor (props) {
@@ -59,14 +85,17 @@ class CalScreen extends React.Component {
     * Make this function fast!  Perhaps something like:
     *   (r1, r2) => r1.id !== r2.id}
     *************************************************************/
-    const rowHasChanged = (r1, r2) => r1.checkSum !== r2.checkSum
+    const rowHasChanged = (r1, r2) => {
+      if (r1.weekIdx === 0) console.log('rowHasChanged r1 vs r2 :', r1, r2)
+      return (r1.checkSum !== r2.checkSum)
+    }
 
     // DataSource configured
     const ds = new ListView.DataSource({rowHasChanged})
 
     // Datasource is always in state
     this.state = {
-      dataSource: ds.cloneWithRows(this.calculateWeekObjects(props.cal))
+      dataSource: ds.cloneWithRows([])
     }
   }
 
@@ -112,8 +141,12 @@ class CalScreen extends React.Component {
   *************************************************************/
   componentWillReceiveProps (newProps) {
     if (newProps.cal) {
+      console.log('componentWillReceiveProps is called')
+      let data = (this.state.dataSource.getRowCount()<1)
+        ? this.calculateWeekObjects(newProps.cal)
+        : this.updateWeekObjects(newProps.cal)
       this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(this.calculateWeekObjects(newProps.cal))
+        dataSource: this.state.dataSource.cloneWithRows(data)
       })
     }
   }
