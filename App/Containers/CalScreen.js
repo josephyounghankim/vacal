@@ -3,6 +3,7 @@ import { View, Text, ListView, Button, BackAndroid } from 'react-native'
 import { connect } from 'react-redux'
 import WeekRow from '../Components/WeekRow'
 import CalActions from '../Redux/CalRedux'
+import DateInput from '../Components/DateInput'
 
 // For empty lists
 // import AlertMessage from '../Components/AlertMessage'
@@ -22,6 +23,10 @@ class CalScreen extends React.Component {
     console.log('handlePress:', date, weekIdx)
     this._curWeekIdx = weekIdx
     this.props.updateVacDay(date)
+  }
+
+  handleSubmitEditing = (text) => {
+    console.log('handleSubmitEditing:', text)
   }
 
   calculateWeekObjects = cal => {
@@ -188,9 +193,9 @@ class CalScreen extends React.Component {
     return (
       <View style={styles.container}>
         <Text>Hello ListView</Text>
-        <Text>Start Date:{startDate}</Text>
-        <Text>Days Left:{maxVacDays - daysCount}</Text>
+        <DateInput date={startDate} title='Start Date:' onSubmitEditing={this.handleSubmitEditing} />
         <Text>Max Days:{maxVacDays}</Text>
+        <Text>Days Left:{maxVacDays - daysCount}</Text>
         <Button
           title='Fetch VacDays'
           onPress={() => this.props.vacDaysRequest()}
