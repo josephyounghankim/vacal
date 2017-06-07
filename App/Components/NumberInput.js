@@ -1,43 +1,37 @@
 import React from 'react'
 import { View, Text, TextInput, Button } from 'react-native'
-import styles from './Styles/DateInputStyle'
+import styles from './Styles/NumberInputStyle'
 
-export default class DateInput extends React.Component {
+export default class NumberInput extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      date: props.date.substr(0,10),  // 2016-09-14
-      orgDate: props.date.substr(0,10),  // 2016-09-14
+      number: props.number,
+      orgNumber: props.number,
       isEditing: false
     }
   }
   componentWillReceiveProps (newProps) {
-    const {date} = newProps
-    this.setState({
-      date: date.substr(0,10),  // 2016-09-14
-      orgDate: date.substr(0,10)  // 2016-09-14
-    })
+    const {number} = newProps
+    this.setState({number, orgNumber:number})
   }
   onChangeText = (text) => {
-    this.setState({date:text})
+    this.setState({number:text})
   }
   onEdit = () => {
     this.setState({isEditing:true})
   }
   onSave = () => {
-    const date = this.state.date
-    if (date.length === 10) {
-      const d = new Date(date).getTime()
-      if (d >= new Date('2015').getTime() && d < new Date('2050').getTime()) {
-        this.setState({orgDate:date, isEditing:false})
-        this.props.onSubmitEditing(new Date(date).toJSON())
-        return
-      }
+    const number = parseInt(this.state.number) || -1
+    if (number>=0 && number<100) {
+      this.setState({orgNumber:''+number, isEditing:false})
+      this.props.onSubmitEditing(''+number)
+      return
     }
-    this.setState({date:this.state.orgDate, isEditing:false})
+    this.setState({number:this.state.orgNumber, isEditing:false})
   }
   onCancel = () => {
-    this.setState({date:this.state.orgDate, isEditing:false})
+    this.setState({number:this.state.orgNumber, isEditing:false})
   }
 
   render () {
@@ -51,14 +45,14 @@ export default class DateInput extends React.Component {
               <TextInput
                 style={{flex:2, height: 20, borderColor: 'gray', borderWidth: 1}}
                 onChangeText={this.onChangeText}
-                value={this.state.date}
+                value={this.state.number}
               />
               <Button title='Save' onPress={this.onSave} />
               <Button title='Cancel' onPress={this.onCancel} />
             </View>
           ) : (
             <View style={{flex:1, flexDirection:'row'}}>
-              <Text style={{}}>{this.state.date}</Text>
+              <Text style={{}}>{this.state.number}</Text>
               <Button style={{height:12}} title='Edit' onPress={this.onEdit} />
             </View>
           )
@@ -69,12 +63,12 @@ export default class DateInput extends React.Component {
 }
 
 // // Prop type warnings
-// DateInput.propTypes = {
+// NumberInput.propTypes = {
 //   someProperty: React.PropTypes.object,
 //   someSetting: React.PropTypes.bool.isRequired
 // }
 //
 // // Defaults for props
-// DateInput.defaultProps = {
+// NumberInput.defaultProps = {
 //   someSetting: false
 // }

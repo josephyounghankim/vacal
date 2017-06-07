@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import WeekRow from '../Components/WeekRow'
 import CalActions from '../Redux/CalRedux'
 import DateInput from '../Components/DateInput'
+import NumberInput from '../Components/NumberInput'
 
 // For empty lists
 // import AlertMessage from '../Components/AlertMessage'
@@ -25,10 +26,16 @@ class CalScreen extends React.Component {
     this.props.updateVacDay(date)
   }
 
-  handleSubmitEditing = (startDate) => {
-    console.log('handleSubmitEditing:', startDate)
+  handleSubmitStartDate = (startDate) => {
+    console.log('handleSubmitStartDate:', startDate)
     this._curWeekIdx = -1 // refresh all
     this.props.updateStartDate(startDate)
+  }
+
+  handleSubmitMaxVacDays = (maxVacDays) => {
+    console.log('handleSubmitMaxVacDays:', maxVacDays)
+    this._curWeekIdx = -1 // refresh all
+    this.props.updateMaxVacDays(parseInt(maxVacDays))
   }
 
   calculateWeekObjects = cal => {
@@ -178,7 +185,7 @@ class CalScreen extends React.Component {
 
   render () {
     const { startDate, maxVacDays, vacDays } = this.props.cal
-    // console.log( 'vacDays:', vacDays, vacDays.length )
+    console.log( 'cal:', this.props.cal )
 
     const sTime = new Date(startDate).getTime()
     const aYearTime = 365 * 24 * 3600 * 1000
@@ -193,14 +200,10 @@ class CalScreen extends React.Component {
 
     return (
       <View style={styles.container}>
-        <Text>Hello ListView</Text>
-        <DateInput date={startDate} title='Start Date:' onSubmitEditing={this.handleSubmitEditing} />
-        <Text>Max Days:{maxVacDays}</Text>
+        <Text>Vacation Calculator</Text>
+        <DateInput date={startDate} title='Start Date:' onSubmitEditing={this.handleSubmitStartDate} />
+        <NumberInput number={''+maxVacDays} title='Max Days:' onSubmitEditing={this.handleSubmitMaxVacDays} />
         <Text>Days Left:{maxVacDays - daysCount}</Text>
-        <Button
-          title='Fetch VacDays'
-          onPress={() => this.props.vacDaysRequest()}
-        />
         <ListView
           contentContainerStyle={styles.listContent}
           dataSource={this.state.dataSource}
