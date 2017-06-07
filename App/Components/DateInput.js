@@ -49,7 +49,7 @@ export default class DateInput extends React.Component {
           ? (
             <View style={{flex:1, flexDirection:'row'}}>
               <TextInput
-                style={{flex:2, height: 20, borderColor: 'gray', borderWidth: 1}}
+                style={{flex:2, height: 40, borderColor: 'gray', borderWidth: 1}}
                 onChangeText={this.onChangeText}
                 value={this.state.date}
               />

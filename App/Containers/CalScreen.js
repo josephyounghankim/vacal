@@ -91,6 +91,8 @@ class CalScreen extends React.Component {
 
   constructor (props) {
     super(props)
+    this._curWeekIdx = -1
+    
     /* ***********************************************************
     * STEP 1
     * This is an array of objects with the properties you desire
