@@ -57,7 +57,7 @@ class CalScreen extends React.Component {
         const t = (vday.type === 'full') ? 8 : 0
         // console.log('diff, t', s, d, diff, t)
         return acc | (((2 << diff)) << t)
-      }), 0)
+      }), realStartDate.getTime())
       weekObjects.push({ weekIdx: i, sDate, eDate, vDays, checkSum, handlePress: this.handlePress })
     }
     this._lastWeekObjects = weekObjects.concat()
@@ -91,8 +91,9 @@ class CalScreen extends React.Component {
 
   constructor (props) {
     super(props)
+    console.log('constructor:', props)
     this._curWeekIdx = -1
-    
+
     /* ***********************************************************
     * STEP 1
     * This is an array of objects with the properties you desire
@@ -115,11 +116,12 @@ class CalScreen extends React.Component {
 
     // Datasource is always in state
     this.state = {
-      dataSource: ds.cloneWithRows([])
+      dataSource: ds.cloneWithRows(this.calculateWeekObjects(props.cal))
     }
   }
 
   componentWillMount () {
+    console.log('componentWillMount:', this.props.cal)
     // this.props.vacDaysRequest()
   }
 
@@ -162,7 +164,7 @@ class CalScreen extends React.Component {
   componentWillReceiveProps (newProps) {
     if (newProps.cal) {
       console.log('componentWillReceiveProps is called')
-      let data = (this.state.dataSource.getRowCount()<1)
+      let data = (this.state.dataSource.getRowCount()<1 || this.props.cal.startDate !== newProps.cal.startDate)
         ? this.calculateWeekObjects(newProps.cal)
         : this.updateWeekObjects(newProps.cal)
       this.setState({
