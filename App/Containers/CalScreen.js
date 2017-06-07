@@ -89,6 +89,11 @@ class CalScreen extends React.Component {
     return arr
   }
 
+  onFetchSampleData = () => {
+    // fetch my sample data on 2016-2017
+    this.props.fetchSampleData()
+  }
+
   constructor (props) {
     super(props)
     console.log('constructor:', props)
@@ -122,7 +127,6 @@ class CalScreen extends React.Component {
 
   componentWillMount () {
     console.log('componentWillMount:', this.props.cal)
-    // this.props.vacDaysRequest()
   }
 
   /* ***********************************************************
@@ -216,6 +220,7 @@ class CalScreen extends React.Component {
           enableEmptySections
           pageSize={15}
         />
+        <Button title='Fetch SampleData' onPress={this.onFetchSampleData} />
       </View>
     )
   }
@@ -229,8 +234,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    vacDaysRequest: () => dispatch(CalActions.vacDaysRequest()),
-    addVacDay: vacDay => dispatch(CalActions.addVacDay(vacDay)),
+    fetchSampleData: () => dispatch(CalActions.fetchSampleData()),
     updateVacDay: date => dispatch(CalActions.updateVacDay(date)),
     updateStartDate: startDate => dispatch(CalActions.updateStartDate(startDate)),
     updateMaxVacDays: maxVacDays => dispatch(CalActions.updateMaxVacDays(maxVacDays))
