@@ -25,8 +25,10 @@ class CalScreen extends React.Component {
     this.props.updateVacDay(date)
   }
 
-  handleSubmitEditing = (text) => {
-    console.log('handleSubmitEditing:', text)
+  handleSubmitEditing = (startDate) => {
+    console.log('handleSubmitEditing:', startDate)
+    this._curWeekIdx = -1 // refresh all
+    this.props.updateStartDate(startDate)
   }
 
   calculateWeekObjects = cal => {
@@ -61,8 +63,7 @@ class CalScreen extends React.Component {
     const { startDate, vacDays } = cal
     const arr = this._lastWeekObjects
     if (this._curWeekIdx < 0) {
-      // arr.forEach(wo => wo.checkSum = -1)
-      return arr
+      return this.calculateWeekObjects(cal) // refresh all
     }
     const wo = arr[this._curWeekIdx]
 
@@ -223,7 +224,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     vacDaysRequest: () => dispatch(CalActions.vacDaysRequest()),
     addVacDay: vacDay => dispatch(CalActions.addVacDay(vacDay)),
-    updateVacDay: date => dispatch(CalActions.updateVacDay(date))
+    updateVacDay: date => dispatch(CalActions.updateVacDay(date)),
+    updateStartDate: startDate => dispatch(CalActions.updateStartDate(startDate)),
+    updateMaxVacDays: maxVacDays => dispatch(CalActions.updateMaxVacDays(maxVacDays))
   }
 }
 

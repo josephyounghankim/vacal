@@ -7,6 +7,8 @@ const { Types, Creators } = createActions({
   addVacDay: ['vacDay'],
   removeVacDay: ['vacDay'],
   updateVacDay: ['date'],
+  updateStartDate: ['startDate'],
+  updateMaxVacDays: ['maxVacDays'],
   vacDaysRequest: null
 })
 
@@ -60,6 +62,17 @@ export const toggleVacDay = (state, action) => {
   }
   return state.merge({ vacDays })
 }
+
+export const updateStartDate = (state, action) => {
+  const { startDate } = action
+  return state.merge({ startDate })
+}
+
+export const updateMaxVacDays = (state, action) => {
+  const { maxVacDays } = action
+  return state.merge({ maxVacDays })
+}
+
 // // successful api lookup
 // export const success = (state, action) => {
 //   const { payload } = action
@@ -74,5 +87,7 @@ export const toggleVacDay = (state, action) => {
 
 export const reducer = createReducer(INITIAL_STATE, {
   [Types.VAC_DAYS_REQUEST]: requestAll,
-  [Types.UPDATE_VAC_DAY]: toggleVacDay
+  [Types.UPDATE_VAC_DAY]: toggleVacDay,
+  [Types.UPDATE_START_DATE]: updateStartDate,
+  [Types.UPDATE_MAX_VAC_DAYS]: updateMaxVacDays
 })

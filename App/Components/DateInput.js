@@ -6,22 +6,31 @@ export default class DateInput extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      date: props.date.substr(0,10),
+      date: props.date.substr(0,10),  // 2016-09-14
+      orgDate: props.date.substr(0,10),  // 2016-09-14
       isEditing: false
     }
   }
   onChangeText = (text) => {
     this.setState({date:text})
-    this.props.onSubmitEditing(text)
   }
   onEdit = () => {
     this.setState({isEditing:true})
   }
   onSave = () => {
-    this.setState({isEditing:false})
+    const date = this.state.date
+    if (date.length === 10) {
+      const d = new Date(date).getTime()
+      if (d >= new Date('2015').getTime() && d < new Date('2050').getTime()) {
+        this.setState({orgDate:date, isEditing:false})
+        this.props.onSubmitEditing(new Date(date).toJSON())
+        return
+      }
+    }
+    this.setState({date:this.state.orgDate, isEditing:false})
   }
   onCancel = () => {
-    this.setState({isEditing:false})
+    this.setState({date:this.state.orgDate, isEditing:false})
   }
 
   render () {
