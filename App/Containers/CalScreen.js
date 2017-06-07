@@ -80,7 +80,7 @@ class CalScreen extends React.Component {
     const checkSum = vDays.reduce(((acc, vday) => {
       const d = new Date(vday.date)
       const diff = (d.getTime() - s.getTime())/(3600 * 24 * 1000)
-      const t = (vday.type === 'full') ? 8 : 0
+      const t = (vday.type === 'full') ? 0 : ((vday.type === 'half1') ? 8 : 16)
       return acc | (((2 << diff)) << t)
     }), 0)
 
@@ -200,7 +200,7 @@ class CalScreen extends React.Component {
     const daysCount = vacDays.reduce((count, day) => {
       const dTime = new Date(day.date).getTime()
       if (dTime >= sTime && dTime < (sTime + aYearTime)) {
-        if (day.type === 'half') return count + 0.5
+        if (day.type === 'half1' || day.type === 'half2') return count + 0.5
         return count + 1.0
       }
       return count

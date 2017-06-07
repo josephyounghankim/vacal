@@ -31,18 +31,18 @@ export const fetchSampleData = state => {
     { date: new Date('2016-12-27').toJSON(), type: 'full' },
     { date: new Date('2016-12-28').toJSON(), type: 'full' },
     { date: new Date('2016-12-29').toJSON(), type: 'full' },
-    { date: new Date('2017-01-31').toJSON(), type: 'half' },
-    { date: new Date('2017-02-01').toJSON(), type: 'half' },
+    { date: new Date('2017-01-31').toJSON(), type: 'half1' },
+    { date: new Date('2017-02-01').toJSON(), type: 'half2' },
     { date: new Date('2017-02-23').toJSON(), type: 'full' },
     { date: new Date('2017-02-24').toJSON(), type: 'full' },
     { date: new Date('2017-02-27').toJSON(), type: 'full' },
     { date: new Date('2017-03-31').toJSON(), type: 'full' },
-    { date: new Date('2017-04-03').toJSON(), type: 'half' },
-    { date: new Date('2017-04-17').toJSON(), type: 'half' },
-    { date: new Date('2017-04-18').toJSON(), type: 'half' },
+    { date: new Date('2017-04-03').toJSON(), type: 'half1' },
+    { date: new Date('2017-04-17').toJSON(), type: 'half1' },
+    { date: new Date('2017-04-18').toJSON(), type: 'half2' },
     { date: new Date('2017-05-02').toJSON(), type: 'full' },
     { date: new Date('2017-05-04').toJSON(), type: 'full' },
-    { date: new Date('2017-05-29').toJSON(), type: 'half' }
+    { date: new Date('2017-05-29').toJSON(), type: 'half1' }
   ]
   const startDate = new Date('2016-09-14').toJSON()
 
@@ -57,8 +57,9 @@ export const toggleVacDay = (state, action) => {
     vacDays.push({ date: date.toJSON(), type: 'full' })
   } else {
     const v = vDays[0]
-    if (v.type === 'full') v.type = 'half'
-    else if (v.type === 'half') vacDays.splice(vacDays.indexOf(v),1)
+    if (v.type === 'full') v.type = 'half1'
+    else if (v.type === 'half1') v.type = 'half2'
+    else if (v.type === 'half2') vacDays.splice(vacDays.indexOf(v),1)
   }
   return state.merge({ vacDays })
 }

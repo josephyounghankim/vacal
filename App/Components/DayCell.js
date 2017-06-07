@@ -12,7 +12,7 @@ export default class DayCell extends React.Component {
     const date = moment(this.props.date).format('MM/DD')
     return (
       <TouchableOpacity style={[styles.container, styles[this.props.type + 'day']]} onPress={this.handlePress}>
-      <Text style={[{color:'black', textAlign:'center'}, styles[this.props.day.toLowerCase() + 'dayText']]}>{this.props.day} {date}</Text>
+        <Text style={[{color:'black', textAlign:'center'}, styles[this.props.day.toLowerCase() + 'dayText']]}>{this.props.day} {date}</Text>
       </TouchableOpacity>
     )
     /*
